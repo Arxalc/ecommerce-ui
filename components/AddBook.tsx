@@ -125,6 +125,16 @@ const AddBook = ({ addisOpen, addsetIsOpen }: ModalProp) => {
                             </button>
                           </div>
                           <div className="col-lg-6">
+                          <div className={styles.form_content}>
+                              <input
+                                type="text"
+                                placeholder=""
+                                {...register("vendor")}
+                              />
+                              <label>Vendor</label>
+                              <div className={styles.line}></div>
+                            </div>
+
                             <div className={styles.form_content}>
                               <input
                                 type="text"

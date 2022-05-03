@@ -16,7 +16,17 @@ export default function AdminPanel({ userData }) {
   //const [isOpen, setIsOpen] = React.useState(false);
   let [isOpen, setIsOpen] = useState(false);
   let [addisOpen, addsetIsOpen] = useState(false);
+  const [isDisabled, setDisabled] = useState(true);
+  const [formData, setFormData] = useState({ username: "", email: "", id: "", userRole: "" });
+  const [debugContent, setDebugContent] = useState();
+  const [isEdit, setIsEdit] = useState(false);
+
   const router = useRouter();
+
+  const handleSubmit = (data) => {
+    update(formData);
+  };
+
 
   async function deleteUser(data) {
     const dataP = { email: data };
@@ -24,16 +34,18 @@ export default function AdminPanel({ userData }) {
     router.replace(router.asPath);
     // console.log(data);
   }
+
+
   return (
     <div
       className="container-fluid min-h-screen w-screen"
       style={{ backgroundColor: "#DDBEA9" }}
     >
-       <div className="" style={{ backgroundColor: "#B98B73" }}>
-				<ManageHeader />
-			</div>
+      <div className="" style={{ backgroundColor: "#B98B73" }}>
+        <ManageHeader />
+      </div>
       <div className="container-xl">
-        <div className="table_responsive" style={{ marginTop: "10%" }}>
+        <div className="table_responsive" style={{ marginTop: "5%" }}>
           <div className={styles.table_wrapper}>
             <div className={styles.table_title}>
               <div className="row">
@@ -55,15 +67,6 @@ export default function AdminPanel({ userData }) {
                     />
                     <i className="material-icons">&#xE147;</i>{" "}
                     <span>Add New Account</span>
-                  </a>
-                  <a
-                    href="#deleteEmployeeModal"
-                    className="btn btn-danger"
-                    data-toggle="modal"
-                    style={{ float: "right" }}
-                  >
-                    <i className="material-icons">&#xE15C;</i>{" "}
-                    <span>checkbox check delete [opt ingnore]</span>
                   </a>
                 </div>
               </div>
@@ -96,11 +99,31 @@ export default function AdminPanel({ userData }) {
                           className="edit"
                           data-toggle="modal"
                           style={{ float: "left" }}
-                          onClick={() => setIsOpen(!isOpen)}
+                          //onClick={() => setIsOpen(!isOpen)}
+                          onClick={() => {
+                            setFormData({
+                              username: user.username,
+                              email: user.email,
+                              id: user.id,
+                              userRole: user.userRole,
+                            });
+
+                            setDebugContent({
+                              username: user.username,
+                              email: user.email,
+                              id: user.id,
+                              userRole: user.userRole,
+                            });
+
+                            setIsEdit(true);
+
+                          }}
                         >
                           <FaEdit />
+                          {/*
                           <EditUser isOpen={isOpen} setIsOpen={setIsOpen} />
                           <i data-toggle="tooltip" title="Edit"></i>
+                        */}
                         </a>
                         <a
                           className="delete"
@@ -117,179 +140,64 @@ export default function AdminPanel({ userData }) {
                 ))}
               </tbody>
             </table>
-            <div className="clearfix">
-              <div className="hint_text">
-                Showing <b>5</b> out of <b>25</b> entries
-              </div>
-              <ul className={styles.pagination}>
-                <li className="page-item disabled">
-                  <a href="#">Previous</a>
-                </li>
-                <li className="page-item">
-                  <a href="#" className="page-link">
-                    1
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a href="#" className="page-link">
-                    2
-                  </a>
-                </li>
-                <li className="page-item active">
-                  <a href="#" className="page-link">
-                    3
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a href="#" className="page-link">
-                    4
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a href="#" className="page-link">
-                    5
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a href="#" className="page-link">
-                    Next
-                  </a>
-                </li>
-              </ul>
+            <div className="mb-4" >
+              <form
+                className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit(formData);
+                  setIsEdit(false);
+                }}
+              >
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Content
+                </label>
+                <input
+                  type="input"
+                  placeholder="Name"
+                  value={formData.username}
+
+                  onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                  }
+
+                  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline w-full overflow-x-hidden"
+                />
+
+                <input
+                  type="input"
+                  placeholder="Email"
+                  onChange={(e) => {
+                    setFormData({ ...formData, email: e.target.value });
+                  }}
+
+                  value={formData.email}
+                  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline w-full overflow-x-hidden"
+                />
+
+                <input
+                  type="input"
+                  placeholder="Type"
+                  onChange={(e) => {
+                    setFormData({ ...formData, userRole: e.target.value });
+                  }}
+
+                  value={formData.userRole}
+                  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline w-full overflow-x-hidden"
+                />
+
+                <input
+                  className={"py-2 px-4 bg-yellow-400 text-gray-800 font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300"}
+                  type="submit" // Updates
+                  disabled={isDisabled}
+                />
+                {/* <p className="w-full overflow-x-hidden">
+                Debug: <pre>{JSON.stringify(debugContent)}</pre>
+                <Link href="/">Home</Link>
+              </p>*/}
+
+              </form>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="addEmployeeModal" className="modal fade">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <form>
-              <div className="modal-header">
-                <h4 className="modal-title">Add User</h4>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-hidden="true"
-                >
-                  &times;
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label>Name</label>
-                  <input type="text" className="form-control" required></input>
-                </div>
-                <div className="form-group">
-                  <label>Type</label>
-                  <textarea className="form-control" required></textarea>
-                </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="email" className="form-control" required></input>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <input
-                  type="button"
-                  className="btn btn-default"
-                  data-dismiss="modal"
-                  value="Cancel"
-                ></input>
-                <input
-                  type="submit"
-                  className="btn btn-success"
-                  value="Add"
-                ></input>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div id="editEmployeeModal" className="modal fade">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <form>
-              <div className="modal-header">
-                <h4 className="modal-title">Edit User</h4>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-hidden="true"
-                >
-                  &times;
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label>Name</label>
-                  <input type="text" className="form-control" required></input>
-                </div>
-                <div className="form-group">
-                  <label>Type</label>
-                  <input type="text" className="form-control" required></input>
-                </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="email" className="form-control" required></input>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <input
-                  type="button"
-                  className="btn btn-default"
-                  data-dismiss="modal"
-                  value="Cancel"
-                ></input>
-                <input
-                  type="submit"
-                  className="btn btn-info"
-                  value="Save"
-                ></input>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div id="deleteEmployeeModal" className="modal fade">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <form>
-              <div className="modal-header">
-                <h4 className="modal-title">Delete Employee</h4>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-hidden="true"
-                >
-                  &times;
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>Are you sure you want to delete these Records?</p>
-                <p className="text-warning">
-                  <small>This action cannot be undone.</small>
-                </p>
-              </div>
-              <div className="modal-footer">
-                <input
-                  type="button"
-                  className="btn btn-default"
-                  data-dismiss="modal"
-                  value="Cancel"
-                ></input>
-                <input
-                  type="submit"
-                  className="btn btn-danger"
-                  value="Delete"
-                ></input>
-              </div>
-            </form>
           </div>
         </div>
       </div>

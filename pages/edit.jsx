@@ -5,6 +5,7 @@ import { prisma } from "../lib/prisma";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import ManageHeader from "../components/ManageHeader";
 
 function Edit({ userData }) {
   const { data: session } = useSession();
@@ -48,9 +49,20 @@ function Edit({ userData }) {
       : setDisabled(true);
   });
 
+  /*
+  const styleDebugPanel = {
+    position: "fixed",
+    bottom: "0px",
+    height: "10%",
+  };
+*/
+
   return (
     <>
-      <div className={styles.container}>
+      <div>
+        <ManageHeader />
+      </div>
+      <div className="card">
         <div className="flex flex-col">
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
@@ -139,7 +151,7 @@ function Edit({ userData }) {
           </div>
           {/* <EditForm /> */}
 
-          <div className="mb-4">
+          <div className="mb-4" >
             <form
               className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
               onSubmit={(e) => {
@@ -172,9 +184,8 @@ function Edit({ userData }) {
               />
 
               <input
-                className={`text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor:pointer ${
-                  isDisabled ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-700"
-                }`}
+                className={`text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor:pointer ${isDisabled ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-700"
+                  }`}
                 type="submit"
                 disabled={isDisabled}
               />
